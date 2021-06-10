@@ -19,7 +19,7 @@ void setup(){
   fullScreen();
   for(int i = 0; i<starts.length; i++){
     starts[i] = new PVector(random(width-100), random(height-100));
-    println(starts[i].x + " " + starts[i].y);
+    println(starts[i]);
   }
   lastPoint = starts[int(random(starts.length))]; // first point gets chosen randomly
   println();
