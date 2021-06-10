@@ -4,7 +4,7 @@ PVector[] starts = new PVector[3];
 String typing;
 String saved;
 
-int rad = 5;
+int rad = 15;
 color selected = color(255,0,0);
 color newPoint = color(0,255,0);
 
@@ -12,9 +12,11 @@ PVector rand;
 PVector lastPoint;
 PVector thisPoint;
 
+boolean mouse, start;
+
 void setup(){
-  frameRate(100);
-  size(500, 750);
+  frameRate(60);
+  fullScreen();
   for(int i = 0; i<starts.length; i++){
     starts[i] = new PVector(random(width-100), random(height-100));
     println(starts[i].x + " " + starts[i].y);
@@ -28,23 +30,40 @@ void draw(){
   fill(255);
   rand = starts[int(random(starts.length))];
   for(PVector p : starts){
-    fill(0,255,0);
-    if(p == rand){fill(selected);}
+    if(dist(mouseX, mouseY, p.x, p.y) < rad+50 && mouse){
+      p.set(mouseX, mouseY,0);
+    }
+    if(p == rand && start)fill(selected);
     ellipse(p.x, p.y, rad, rad); 
-    //println(p + " " + rand.x);
     fill(255);
   }
-  println();
-  thisPoint = PVector.sub(rand, lastPoint); //find vector
-  println(lastPoint);
-  println(thisPoint);
-  println();
-  thisPoint = new PVector(lastPoint.x + thisPoint.x/2, lastPoint.y + thisPoint.y/2);
-  points.add(thisPoint);
-  for(PVector p : points){
-  ellipse(p.x, p.y, rad, rad);
+  if(start){
+    thisPoint = PVector.sub(rand, lastPoint); //find vector
+    println(thisPoint);
+    thisPoint = new PVector(lastPoint.x + thisPoint.x/2, lastPoint.y + thisPoint.y/2);
+    points.add(thisPoint);
+    for(PVector p : points){
+      if(p == thisPoint)fill(newPoint);
+      ellipse(p.x, p.y, rad, rad);
+      fill(255);
+    }
+    lastPoint = thisPoint;
   }
-  lastPoint = thisPoint;
- 
+}
+
+void mousePressed(){
+  mouse = true;
+  
+}
+
+void mouseReleased(){
+  mouse = false;
+}
+
+void keyPressed() {
+  if(key == 'x'){
+    start = true;
+    rad = 5;
+  }
 }
   
